@@ -1,0 +1,87 @@
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+<form id="alarmForm">
+  <label for="selectedAlarmTime">Start time: </label>
+  <input type="time" id="selectedAlarmTime">
+
+</form>
+
+<button type="button" onclick="alert('Hello world!')">Click Me!</button>
+<button type="button" onclick="setAlarmTime()">Set Alarm!</button>
+
+  <p>
+    Curtains set to open at time: <code>
+            "<span id="showSelectedAlarmTime">n/a</span>"</code>.
+  </p>
+
+  <p>
+        Value of the <code>time</code> input: <code>
+            "<span id="value">n/a</span>"</code>.
+  </p>
+
+<script type="text/javascript">
+	
+	var timeSpan = document.getElementById("showSelectedAlarmTime");
+	var valueSpan = document.getElementById("value");
+
+	selectedAlarmTime.addEventListener("input", function() {
+		valueSpan.innerText = selectedAlarmTime.value;
+		$("alarmForm").submit();
+	}, false);	
+
+
+    function submitDetailsForm() {
+       $("#alarmForm").submit();
+    }
+
+    function alertTest(){
+    	alert("function: Hello world!")
+    }
+
+
+function setAlarmTime(){
+
+  timeSpan.innerText = selectedAlarmTime.value;
+
+  $.ajax({
+      type: "POST",
+      url: "/timeset",
+      // The key needs to match your method's input parameter (case-sensitive).
+      data: JSON.stringify({ time: selectedAlarmTime.value, command: "open"}),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function(data){alert(data);},
+      failure: function(errMsg) {
+          alert(errMsg);
+      }
+  });
+}
+</script>
+
+<!-- <script type="text/javascript">
+// GET is the default method, so we don't need to set it
+fetch('/timeset')
+    .then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('GET response text:');
+        console.log(text); // Print the greeting as text
+    });
+
+// Send the same request
+fetch('/timeset')
+    .then(function (response) {
+        return response.json(); // But parse it as JSON this time
+    })
+    .then(function (json) {
+        console.log('GET response as JSON:');
+        console.log(json); // Here’s our JSON object
+    })
+</script>
+
+
+ -->
