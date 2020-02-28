@@ -1,57 +1,78 @@
+<head>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
 
+<body>
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
 
+
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+  
+  
+
 <form id="alarmForm">
   <label for="selectedAlarmTime">Start time: </label>
   <input type="time" id="selectedAlarmTime">
-
 </form>
 
-<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-<button type="button" onclick="setAlarmTime()">Set Alarm!</button>
 
-  <p>
-    Curtains set to open at time: <code>
-            "<span id="showSelectedAlarmTime">n/a</span>"</code>.
-  </p>
+<button type="button" onclick="updateAlarmState()">Set Alarm!</button>
 
-  <p>
-        Value of the <code>time</code> input: <code>
-            "<span id="value">n/a</span>"</code>.
-  </p>
+<label class="switch"><input type="checkbox" id="alarmToggle" onclick="toggleAlarmState()">
+  <div class="slider round">
+    <span class="on">ON</span><span class="off">OFF</span>
+  </div>
+</label>
+
+<p>
+  Curtains set to open at time: <code>
+          "<span id="showSelectedAlarmTime">n/a</span>"</code>.
+</p>
+
+</body>
+
+
+
+
+
+
 
 <script type="text/javascript">
 	
 	var timeSpan = document.getElementById("showSelectedAlarmTime");
-	var valueSpan = document.getElementById("value");
+  var valueSpan = document.getElementById("value");
+  var alarmState = "off";
 
 	selectedAlarmTime.addEventListener("input", function() {
 		valueSpan.innerText = selectedAlarmTime.value;
 		$("alarmForm").submit();
 	}, false);	
 
-
-    function submitDetailsForm() {
-       $("#alarmForm").submit();
+  function toggleAlarmState() {
+    var checkBox = document.getElementById("alarmToggle");
+    if (checkBox.checked == true){
+      alarmState = "on";
+      updateAlarmState();
     }
-
-    function alertTest(){
-    	alert("function: Hello world!")
+    else {
+      alarmState = "off";
+      updateAlarmState();
     }
+}
 
-
-function setAlarmTime(){
+function updateAlarmState(){
 
   timeSpan.innerText = selectedAlarmTime.value;
 
   $.ajax({
       type: "POST",
-      url: "/timeset",
+      url: "/",
       // The key needs to match your method's input parameter (case-sensitive).
-      data: JSON.stringify({ time: selectedAlarmTime.value, command: "open"}),
+      data: JSON.stringify({ time: selectedAlarmTime.value, alarmState: alarmState}),
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       success: function(data){alert(data);},
@@ -61,4 +82,3 @@ function setAlarmTime(){
   });
 }
 </script>
-

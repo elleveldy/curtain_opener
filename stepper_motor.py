@@ -34,8 +34,6 @@ class StepperMotor():
 		self.stepPins = [ stepper(12),stepper(16),stepper(20),stepper(21)] # Motor GPIO pins</p><p>
 
 	def execute_step(self, step):
-
-		# print("seq[step] = ", seq[step])
 		for pin in self.sequence[step]:
 
 			xPin = self.stepPins[pin]
@@ -45,9 +43,7 @@ class StepperMotor():
 				xPin.off
 
 	def turn(self, direction, nr_turns):
-
 		nr_steps = int(nr_turns * self.STEPS_PR_LOOP * self.LOOP_SIZE)
-
 		for i in range(0, nr_steps-1):                      
 			step = i % self.LOOP_SIZE
 			# step_nr = i % self.LOOP_SIZE if direction == "clockwise" else (self.LOOP_SIZE - 1) - i % self.LOOP_SIZE 
@@ -63,4 +59,3 @@ class StepperMotor():
 					self.stepPins[pin].off()
 			time.sleep(0.002)
 
-motor = StepperMotor("high_speed")
